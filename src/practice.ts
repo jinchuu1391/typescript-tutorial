@@ -101,3 +101,67 @@ const pets: Pet[] = ['dog', 'cat']
 
 // 클래스와 관련된 타입의 경우엔 interface를 사용하는게 좋고, 일반 객체 타입의 경우엔 그냥 type을 써도 좋다.
 // 객체를 위한 타입을 정의할 때 무엇을 써도 상관 없으나 일관성 있게 쓰는게 좋음.
+
+// function merge(a: any, b: any): any {
+//     return {
+//         ...a,
+//         ...b
+//     }
+// }
+
+function merge<C, D>(a: C, b: D): C & D { // merge의 매개변수로 어떤 타입이 올지 모를 때, 제너릭을 쓸 수 있다.
+    // & -> 두 개 이상의 타입들을 합쳐준다(intersection)
+    return {
+        ...a,
+        ...b
+    }
+}
+
+const merged = merge({foo:1}, {bar:'hi'})
+
+// function wrap(param:any){
+//     return {
+//         param
+//     }
+// }
+
+function wrap<H>(param: H){ // param에 어떤 타입이 올지 모르는 경우 제너릭을 사용할 수 있다
+    return {
+        param
+    }
+}
+
+
+const wrapped = wrap(10)
+
+interface Items<T> {
+    list: T[];
+}
+
+const items: Items<string> = {
+    list: ['a', 'b', 'c']
+}
+
+class Queue<T> {
+    list: T[] = [];
+    get length(){
+        return this.list.length;
+    }
+    enqueue(item:T){
+        this.list.push(item);
+    }
+    dequeue() {
+        return this.list.shift();
+    }
+}
+
+const queue = new Queue<number>();
+queue.enqueue(0);
+queue.enqueue(1);
+queue.enqueue(2);
+queue.enqueue(3);
+queue.enqueue(4);
+queue.enqueue(5);
+console.log('dequeue: ',queue.dequeue());
+console.log('dequeue: ',queue.dequeue());
+console.log('dequeue: ',queue.dequeue());
